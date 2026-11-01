@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Video Studio — Text to Video, Image to Video & Video to Video</title>
+  <meta name="description" content="Free online AI video generator: convert text to video, image to video, and video to video. Choose quality, optimize images, and create stunning videos instantly." />
+  <meta name="keywords" content="text to video, image to video, video to video, AI video generator, online video tool, video quality, image optimization" />
+  <meta name="author" content="AI Video Studio" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://example.com/ai-video-studio" />
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="AI Video Studio — Text, Image & Video to Video" />
+  <meta property="og:description" content="Create videos from text, images, or existing videos. Choose your quality and optimize images. Fast, free, and responsive." />
+  <meta property="og:image" content="https://example.com/og-video-studio.jpg" />
+  <meta property="og:url" content="https://example.com/ai-video-studio" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ---------- RESET & BASE ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: #f8faff;
+      color: #1e293b;
+      line-height: 1.5;
+      padding: 0 1rem;
+    }
+    img, video {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+    button, input, select, textarea {
+      font: inherit;
+    }
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 1.5rem 0;
+    }
+
+    /* ---------- TYPOGRAPHY ---------- */
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: #0f172a;
+    }
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 1rem;
+    }
+    h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .text-muted {
+      color: #475569;
+      font-size: 0.95rem;
+    }
+
+    /* ---------- BUTTONS & CONTROLS ---------- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      background: #3b82f6;
+      color: white;
+      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+    }
+    .btn:hover {
+      background: #2563eb;
+    }
+    .btn:active {
+      transform: scale(0.98);
+    }
+    .btn-outline {
+      background: white;
+      color: #1e293b;
+      border: 1px solid #cbd5e1;
+      box-shadow: none;
+    }
+    .btn-outline:hover {
+      background: #f1f5f9;
+      border-color: #94a3b8;
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* ---------- CARDS & SECTIONS ---------- */
+    .card {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+      border: 1px solid #e9eef4;
+      transition: box-shadow 0.2s;
+    }
+    .card:hover {
+      box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.08);
+    }
+
+    /* ---------- TABS ---------- */
+    .tabs {
+      display: flex;
+      gap: 0.25rem;
+      background: #eef2f6;
+      padding: 0.3rem;
+      border-radius: 2rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      flex: 1 0 auto;
+      padding: 0.7rem 1.2rem;
+      border-radius: 2rem;
+      border: none;
+      background: transparent;
+      font-weight: 600;
+      color: #475569;
+      cursor: pointer;
+      transition: 0.2s;
+      white-space: nowrap;
+    }
+    .tab-btn.active {
+      background: white;
+      color: #0f172a;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+    .tab-btn:hover:not(.active) {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    /* ---------- FORM ELEMENTS ---------- */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 0.4rem;
+      color: #1e293b;
+      font-size: 0.95rem;
+    }
+    textarea, input[type="text"], input[type="file"], select {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border-radius: 1rem;
+      border: 1.5px solid #e2e8f0;
+      background: #fafcff;
+      transition: border 0.2s, box-shadow 0.2s;
+      font-size: 0.95rem;
+    }
+    textarea:focus, input:focus, select:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    .file-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .file-input-wrapper input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+    .file-display {
+      flex: 1;
+      padding: 0.8rem 1rem;
+      background: #fafcff;
+      border: 1.5px dashed #cbd5e1;
+      border-radius: 1rem;
+      font-size: 0.9rem;
+      color: #64748b;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ---------- QUALITY SELECTOR ---------- */
+    .quality-options {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .quality-option {
+      flex: 1 0 auto;
+      padding: 0.6rem 1rem;
+      border-radius: 2rem;
+      border: 2px solid #e2e8f0;
+      background: white;
+      font-weight: 500;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      min-width: 70px;
+    }
+    .quality-option.active {
+      border-color: #3b82f6;
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+    .quality-option:hover {
+      border-color: #94a3b8;
+    }
+
+    /* ---------- AD PLACEHOLDERS ---------- */
+    .ad-slot {
+      background: #f1f5f9;
+      border: 2px dashed #cbd5e1;
+      border-radius: 1.25rem;
+      padding: 1rem;
+      text-align: center;
+      color: #64748b;
+      font-size: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 120px;
+      margin: 1.5rem 0;
+      transition: 0.2s;
+    }
+    .ad-slot.horizontal {
+      min-height: 100px;
+    }
+    .ad-slot.square {
+      min-height: 250px;
+    }
+    .ad-slot .ad-label {
+      font-weight: 600;
+      color: #3b82f6;
+      margin-bottom: 0.25rem;
+    }
+    .ad-slot .ad-hint {
+      font-size: 0.75rem;
+      opacity: 0.8;
+    }
+
+    /* ---------- GRID LAYOUT ---------- */
+    .tool-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    @media (min-width: 900px) {
+      .tool-grid {
+        grid-template-columns: 1fr 300px;
+      }
+      .ad-sidebar {
+        position: sticky;
+        top: 1.5rem;
+      }
+    }
+
+    /* ---------- PREVIEW AREA ---------- */
+    .preview-area {
+      background: #0f172a;
+      border-radius: 1.5rem;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 220px;
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .preview-area video, .preview-area img {
+      border-radius: 0.75rem;
+      max-height: 300px;
+      width: auto;
+    }
+    .preview-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0.7;
+      font-size: 0.95rem;
+    }
+
+    /* ---------- STATUS / SPINNER ---------- */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      background: #f1f5f9;
+      padding: 0.4rem 1rem;
+      border-radius: 2rem;
+      color: #334155;
+    }
+    .spinner {
+      width: 1.25rem;
+      height: 1.25rem;
+      border: 2.5px solid #e2e8f0;
+      border-top-color: #3b82f6;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 640px) {
+      h1 { font-size: 1.6rem; }
+      .card { padding: 1rem; }
+      .btn { width: 100%; }
+      .quality-option { font-size: 0.85rem; padding: 0.5rem 0.75rem; }
+      .tab-btn { font-size: 0.9rem; padding: 0.6rem 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== MAIN CONTAINER ===== -->
+  <div class="container">
+
+    <!-- ===== HEADER ===== -->
+    <header style="margin-bottom: 2rem;">
+      <h1>🎬 AI Video Studio</h1>
+      <p class="text-muted" style="font-size: 1.1rem; max-width: 700px;">
+        Convert <strong>text to video</strong>, <strong>image to video</strong>, or <strong>video to video</strong> — choose your quality, optimize images, and generate in seconds.
+      </p>
+    </header>
+
+    <!-- ===== TOP AD SLOT (horizontal) ===== -->
+    <div class="ad-slot horizontal" id="ad-top">
+      <span class="ad-label">Advertisement</span>
+      <span class="ad-hint">Google AdSense — Top Banner (728×90 or responsive)</span>
+      <!-- AdSense code will be injected here by JS -->
+    </div>
+
+    <!-- ===== TOOL + SIDEBAR GRID ===== -->
+    <div class="tool-grid">
+
+      <!-- ===== MAIN TOOL CARD ===== -->
+      <main class="card" aria-label="Video generation tool">
+
+        <!-- TABS -->
+        <div class="tabs" role="tablist">
+          <button class="tab-btn active" data-tab="text" role="tab" aria-selected="true">📝 Text → Video</button>
+          <button class="tab-btn" data-tab="image" role="tab" aria-selected="false">🖼️ Image → Video</button>
+          <button class="tab-btn" data-tab="video" role="tab" aria-selected="false">🎥 Video → Video</button>
+        </div>
+
+        <!-- ===== TEXT TO VIDEO PANEL ===== -->
+        <div id="panel-text" class="tab-panel" role="tabpanel">
+          <div class="form-group">
+            <label for="text-prompt">Describe your video</label>
+            <textarea id="text-prompt" placeholder="e.g., A serene mountain lake at sunrise, gentle ripples, cinematic 4K ..."></textarea>
+          </div>
+        </div>
+
+        <!-- ===== IMAGE TO VIDEO PANEL ===== -->
+        <div id="panel-image" class="tab-panel" role="tabpanel" style="display:none;">
+          <div class="form-group">
+            <label for="image-upload">Upload an image</label>
+            <div class="file-input-wrapper">
+              <input type="file" id="image-upload" accept="image/*" />
+              <div class="file-display" id="image-file-display">Click to select an image…</div>
+              <button class="btn-outline btn" style="padding:0.6rem 1rem;" onclick="document.getElementById('image-upload').click()">Browse</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Image optimization</label>
+            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+              <label style="display: flex; align-items: center; gap: 0.4rem; font-weight: 400;">
+                <input type="checkbox" id="optimize-image" checked /> Auto-optimize image for video
+              </label>
+            </div>
+            <p class="text-muted" style="font-size: 0.85rem; margin-top: 0.25rem;">Resizes and compresses to match selected quality.</p>
+          </div>
+        </div>
+
+        <!-- ===== VIDEO TO VIDEO PANEL ===== -->
+        <div id="panel-video" class="tab-panel" role="tabpanel" style="display:none;">
+          <div class="form-group">
+            <label for="video-upload">Upload a video</label>
+            <div class="file-input-wrapper">
+              <input type="file" id="video-upload" accept="video/*" />
+              <div class="file-display" id="video-file-display">Click to select a video…</div>
+              <button class="btn-outline btn" style="padding:0.6rem 1rem;" onclick="document.getElementById('video-upload').click()">Browse</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="video-style">Conversion style</label>
+            <select id="video-style">
+              <option value="cinematic">Cinematic</option>
+              <option value="anime">Anime</option>
+              <option value="watercolor">Watercolor</option>
+              <option value="neon">Neon Glow</option>
+              <option value="vintage">Vintage Film</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- ===== SHARED QUALITY SELECTOR ===== -->
+        <div class="form-group" style="margin-top: 1rem;">
+          <label>Video quality</label>
+          <div class="quality-options" id="quality-selector">
+            <div class="quality-option" data-quality="480p">480p</div>
+            <div class="quality-option active" data-quality="720p">720p HD</div>
+            <div class="quality-option" data-quality="1080p">1080p Full HD</div>
+            <div class="quality-option" data-quality="4k">4K Ultra</div>
+          </div>
+        </div>
+
+        <!-- ===== GENERATE BUTTON ===== -->
+        <button class="btn" id="generate-btn" style="width: 100%; padding: 0.9rem; font-size: 1.1rem; margin-top: 0.5rem;">
+          ✨ Generate Video
+        </button>
+
+        <!-- ===== STATUS / PROGRESS ===== -->
+        <div id="status-area" style="margin-top: 1rem; display: none;">
+          <div class="status-badge">
+            <div class="spinner"></div>
+            <span id="status-text">Processing…</span>
+          </div>
+        </div>
+
+        <!-- ===== PREVIEW AREA ===== -->
+        <div style="margin-top: 1.5rem;">
+          <h3>Preview</h3>
+          <div class="preview-area" id="preview-area">
+            <div class="preview-placeholder">
+              <span>🎞️</span>
+              <span>Your generated video will appear here</span>
+            </div>
+          </div>
+        </div>
+
+      </main>
+
+      <!-- ===== SIDEBAR (AD + TIPS) ===== -->
+      <aside class="ad-sidebar">
+        <div class="ad-slot square" id="ad-sidebar">
+          <span class="ad-label">Advertisement</span>
+          <span class="ad-hint">Google AdSense — Sidebar (300×250)</span>
+        </div>
+        <div class="card" style="padding: 1rem; font-size: 0.9rem;">
+          <h3 style="font-size: 1rem;">💡 Pro Tips</h3>
+          <ul style="padding-left: 1.2rem; color: #475569; display: flex; flex-direction: column; gap: 0.4rem;">
+            <li>Use descriptive prompts for better AI results.</li>
+            <li>Higher quality = larger file &amp; longer render time.</li>
+            <li>Optimize images to 1080p before uploading for best results.</li>
+            <li>All processing is simulated for demo purposes.</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <!-- ===== BOTTOM AD SLOT ===== -->
+    <div class="ad-slot horizontal" id="ad-bottom" style="margin-top: 2rem;">
+      <span class="ad-label">Advertisement</span>
+      <span class="ad-hint">Google AdSense — Bottom Banner (728×90 or responsive)</span>
+    </div>
+
+  </div>
+
+  <!-- ===== JAVASCRIPT ===== -->
+  <script>
+    (function() {
+      'use strict';
+
+      // ============================================================
+      // 1. GOOGLE ADSENSE CONFIGURATION
+      // ============================================================
+      // 👇 INSERT YOUR ADSENSE CLIENT ID AND AD UNIT IDs HERE 👇
+      const ADSENSE_CONFIG = {
+        client: 'ca-pub-XXXXXXXXXXXXXXXX',   // Replace with your AdSense client ID
+        slots: {
+          top: '1234567890',                 // Replace with top ad unit ID
+          sidebar: '0987654321',             // Replace with sidebar ad unit ID
+          bottom: '1122334455'               // Replace with bottom ad unit ID
+        }
+      };
+
+      // Load AdSense script dynamically (if not already loaded)
+      function loadAdSenseScript() {
+        if (window.adsbygoogle) return;
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + ADSENSE_CONFIG.client;
+        script.crossOrigin = 'anonymous';
+        document.head.appendChild(script);
+      }
+
+      // Insert AdSense ad unit into a given container
+      function insertAdUnit(containerId, slotId, format = 'auto') {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        // Remove placeholder text/hint if desired (optional)
+        // We keep the label but clear the hint to show ad
+        const hint = container.querySelector('.ad-hint');
+        if (hint) hint.textContent = '';
+
+        // Create ad wrapper
+        const adWrapper = document.createElement('ins');
+        adWrapper.className = 'adsbygoogle';
+        adWrapper.style.display = 'block';
+        adWrapper.style.width = '100%';
+        adWrapper.setAttribute('data-ad-client', ADSENSE_CONFIG.client);
+        adWrapper.setAttribute('data-ad-slot', slotId);
+        adWrapper.setAttribute('data-ad-format', format);
+        adWrapper.setAttribute('data-full-width-responsive', 'true');
+
+        container.appendChild(adWrapper);
+
+        // Push to AdSense
+        try {
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+        } catch (e) {
+          console.warn('AdSense push error (expected if no valid ID):', e);
+        }
+      }
+
+      // Initialize ads after DOM ready
+      function initAds() {
+        loadAdSenseScript();
+        // Small delay to ensure script loads before pushing
+        setTimeout(() => {
+          insertAdUnit('ad-top', ADSENSE_CONFIG.slots.top, 'auto');
+          insertAdUnit('ad-sidebar', ADSENSE_CONFIG.slots.sidebar, 'rectangle');
+          insertAdUnit('ad-bottom', ADSENSE_CONFIG.slots.bottom, 'auto');
+        }, 400);
+      }
+
+      // ============================================================
+      // 2. TAB SWITCHING
+      // ============================================================
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      const panels = {
+        text: document.getElementById('panel-text'),
+        image: document.getElementById('panel-image'),
+        video: document.getElementById('panel-video')
+      };
+
+      tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Update active class
+          tabButtons.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+          btn.classList.add('active');
+          btn.setAttribute('aria-selected', 'true');
+
+          // Show corresponding panel
+          const tab = btn.dataset.tab;
+          Object.keys(panels).forEach(key => {
+            panels[key].style.display = (key === tab) ? 'block' : 'none';
+          });
+        });
+      });
+
+      // ============================================================
+      // 3. QUALITY SELECTOR
+      // ============================================================
+      let selectedQuality = '720p';
+      const qualityOptions = document.querySelectorAll('.quality-option');
+      qualityOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          qualityOptions.forEach(o => o.classList.remove('active'));
+          opt.classList.add('active');
+          selectedQuality = opt.dataset.quality;
+        });
+      });
+
+      // ============================================================
+      // 4. FILE UPLOAD DISPLAY UPDATES
+      // ============================================================
+      const imageUpload = document.getElementById('image-upload');
+      const imageDisplay = document.getElementById('image-file-display');
+      imageUpload.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        imageDisplay.textContent = file ? file.name : 'Click to select an image…';
+      });
+
+      const videoUpload = document.getElementById('video-upload');
+      const videoDisplay = document.getElementById('video-file-display');
+      videoUpload.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        videoDisplay.textContent = file ? file.name : 'Click to select a video…';
+      });
+
+      // ============================================================
+      // 5. GENERATE VIDEO (SIMULATED)
+      // ============================================================
+      const generateBtn = document.getElementById('generate-btn');
+      const statusArea = document.getElementById('status-area');
+      const statusText = document.getElementById('status-text');
+      const previewArea = document.getElementById('preview-area');
+
+      generateBtn.addEventListener('click', () => {
+        // Determine active tab
+        const activeTab = document.querySelector('.tab-btn.active').dataset.tab;
+
+        // Basic validation
+        if (activeTab === 'text') {
+          const prompt = document.getElementById('text-prompt').value.trim();
+          if (!prompt) {
+            alert('Please enter a description for your video.');
+            return;
+          }
+        } else if (activeTab === 'image') {
+          if (!imageUpload.files.length) {
+            alert('Please upload an image first.');
+            return;
+          }
+        } else if (activeTab === 'video') {
+          if (!videoUpload.files.length) {
+            alert('Please upload a video first.');
+            return;
+          }
+        }
+
+        // Show loading state
+        generateBtn.disabled = true;
+        statusArea.style.display = 'block';
+        statusText.textContent = `Generating ${selectedQuality} video…`;
+        previewArea.innerHTML = '<div class="preview-placeholder"><div class="spinner"></div><span>Rendering your video…</span></div>';
+
+        // Simulate processing (2 seconds)
+        setTimeout(() => {
+          // Restore button
+          generateBtn.disabled = false;
+          statusArea.style.display = 'none';
+
+          // Show a simulated preview (placeholder video or image)
+          // Since we can't actually generate video, we show a friendly message + mock preview
+          const qualityLabel = selectedQuality.toUpperCase();
+          previewArea.innerHTML = `
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.75rem; color: #cbd5e1;">
+              <span style="font-size: 2.5rem;">✅</span>
+              <span style="font-size: 1rem; font-weight: 500;">Your ${qualityLabel} video is ready!</span>
+              <span style="font-size: 0.8rem; opacity: 0.7;">(Demo simulation — no actual file generated)</span>
+              <div style="background: #1e293b; padding: 0.5rem 1rem; border-radius: 2rem; font-size: 0.8rem; color: #94a3b8;">
+                Mode: ${activeTab} • Quality: ${selectedQuality}
+              </div>
+            </div>
+          `;
+        }, 2000);
+      });
+
+      // ============================================================
+      // 6. IMAGE OPTIMIZATION (SIMULATED CHECKBOX — just for demo)
+      // ============================================================
+      // The checkbox is already present; we can add a subtle visual feedback
+      const optimizeCheckbox = document.getElementById('optimize-image');
+      if (optimizeCheckbox) {
+        optimizeCheckbox.addEventListener('change', (e) => {
+          // No actual optimization, just UI feedback (not needed)
+          console.log('Image optimization:', e.target.checked ? 'ON' : 'OFF');
+        });
+      }
+
+      // ============================================================
+      // 7. INITIALIZE ADS
+      // ============================================================
+      window.addEventListener('load', initAds);
+
+    })();
+  </script>
+
+  <!-- Optional: fallback ad script (if AdSense fails) — already handled by placeholder -->
+</body>
+</html>
